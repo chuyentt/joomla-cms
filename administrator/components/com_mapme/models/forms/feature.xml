@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+    <field name="ordering"/>
+    <field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+      <option value="1">JPUBLISHED</option>
+      <option value="0">JUNPUBLISHED</option>
+      <option value="2">JARCHIVED</option>
+      <option value="-2">JTRASHED</option>
+    </field>
+    <field name="checked_out" type="hidden" filter="unset"/>
+    <field name="checked_out_time" default="0000-00-00 00:00:00" type="hidden" filter="unset"/>
+    <field name="created_by" type="createdby" default="0" label="COM_MAPME_FORM_LBL_FEATURE_CREATED_BY" description="COM_MAPME_FORM_DESC_FEATURE_CREATED_BY" hidden="true" hint="COM_MAPME_FORM_LBL_FEATURE_CREATED_BY"/>
+    <field name="modified_by" type="modifiedby" default="0" label="COM_MAPME_FORM_LBL_FEATURE_MODIFIED_BY" description="COM_MAPME_FORM_DESC_FEATURE_MODIFIED_BY" hidden="true" hint="COM_MAPME_FORM_LBL_FEATURE_MODIFIED_BY"/>
+    <field name="title" filter="safehtml" type="text" required="true" message="This is a mandatory field, you must not leave it blank!" label="COM_MAPME_FORM_LBL_FEATURE_TITLE" description="COM_MAPME_FORM_DESC_FEATURE_TITLE" hint="COM_MAPME_FORM_LBL_FEATURE_TITLE"/>
+    <field name="lat" filter="safehtml" type="text" label="COM_MAPME_FORM_LBL_FEATURE_LAT" description="COM_MAPME_FORM_DESC_FEATURE_LAT" hint="COM_MAPME_FORM_LBL_FEATURE_LAT"/>
+    <field name="lng" filter="safehtml" type="text" label="COM_MAPME_FORM_LBL_FEATURE_LNG" description="COM_MAPME_FORM_DESC_FEATURE_LNG" hint="COM_MAPME_FORM_LBL_FEATURE_LNG"/>
+    <field name="properties" filter="safehtml" type="textarea" label="COM_MAPME_FORM_LBL_FEATURE_PROPERTIES" description="COM_MAPME_FORM_DESC_FEATURE_PROPERTIES" hint="COM_MAPME_FORM_LBL_FEATURE_PROPERTIES"/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>
