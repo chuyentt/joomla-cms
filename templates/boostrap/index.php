@@ -176,7 +176,9 @@ else {
 						<?php endif; ?>
 						
 						<?php if ($this->countModules('header-search')) : ?>
+                                                    <div class="header-search pull-right">
 							<jdoc:include type="modules" name="header-search" style="none" />
+                                                    </div>
 						<?php endif; ?>
 						
 					</div><!-- /.navbar-collapse -->
