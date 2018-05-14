@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "https://www.joomla.org/xml/dtd/2.5/template-install.dtd">
+<extension version="3.8" type="template" client="site">
+	<name>Boostrap</name>
+	<version>1.0</version>
+	<creationDate>4/23/2018</creationDate>
+	<author>Chuyen Trung Tran</author>
+	<authorEmail>chuyentt@gmail.com</authorEmail>
+	<copyright>Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.</copyright>
+	<description>Boostrap is the Joomla 3 site template based on Boostrap and the launch of the Joomla User Interface library (JUI).</description>
+	<files>
+		<filename>component.php</filename>
+		<filename>error.php</filename>
+		<filename>offline.php</filename>
+		<filename>index.php</filename>
+		<filename>templateDetails.xml</filename>
+		<filename>template_preview.png</filename>
+		<filename>template_thumbnail.png</filename>
+		<folder>css</folder>
+		<folder>html</folder>
+		<folder>images</folder>
+		<folder>img</folder>
+		<folder>js</folder>
+		<folder>language</folder>
+		<folder>less</folder>
+	</files>
+	<positions>
+		<position>header-search</position>
+		<position>main-menu</position>
+		<position>breadcrumbs</position>
+		<position>banner</position>
+		<position>sidebar-left</position>
+		<position>sidebar-right</position>
+		<position>top-a</position>
+		<position>top-b</position>
+		<position>bottom-a</position>
+		<position>bottom-b</position>
+		<position>footer</position>
+		<position>debug</position>
+	</positions>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.tpl_boostrap.ini</language>
+		<language tag="en-GB">en-GB/en-GB.tpl_boostrap.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="advanced">
+				<field 
+					name="templateColor" 
+					type="color" 
+					label="TPL_BOOSTRAP_COLOR_LABEL"
+					description="TPL_BOOSTRAP_COLOR_DESC" 
+					class="" 
+					default="#08C"
+				/>
+
+				<field 
+					name="templateBackgroundColor" 
+					type="color" 
+					label="TPL_BOOSTRAP_BACKGROUND_COLOR_LABEL"
+					description="TPL_BOOSTRAP_BACKGROUND_COLOR_DESC" 
+					class="" 
+					default="#F4F6F7"
+				/>
+
+				<field 
+					name="logoFile" 
+					type="media" 
+					label="TPL_BOOSTRAP_LOGO_LABEL"
+					description="TPL_BOOSTRAP_LOGO_DESC" 
+					class="" 
+					default=""
+				/>
+
+				<field 
+					name="sitetitle"  
+					type="text" 
+					label="JGLOBAL_TITLE"
+					description="JFIELD_ALT_PAGE_TITLE_LABEL"
+					default=""
+					filter="string" 
+				/>
+
+				<field 
+					name="sitedescription"  
+					type="text" 
+					label="JGLOBAL_DESCRIPTION"
+					description="JGLOBAL_SUBHEADING_DESC"
+					default=""
+					filter="string" 
+				/>
+
+				<field 
+					name="googleFont"
+					type="radio"
+					label="TPL_BOOSTRAP_FONT_LABEL"
+					description="TPL_BOOSTRAP_FONT_DESC"
+					class="btn-group btn-group-yesno"
+					default="1"
+					>
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+
+				<field 
+					name="googleFontName" 
+					type="text" 
+					label="TPL_BOOSTRAP_FONT_NAME_LABEL"
+					description="TPL_BOOSTRAP_FONT_NAME_DESC" 
+					class="" 
+					default="Roboto:400,500&amp;subset=vietnamese"
+					showon="googleFont:1" 
+				/>
+
+				<field 
+					name="fluidContainer"
+					type="radio"
+					label="TPL_BOOSTRAP_FLUID_LABEL"
+					description="TPL_BOOSTRAP_FLUID_DESC"
+					class="btn-group btn-group-yesno"
+					default="1"
+					>
+					<option value="1">TPL_BOOSTRAP_FLUID</option>
+					<option value="0">TPL_BOOSTRAP_STATIC</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
