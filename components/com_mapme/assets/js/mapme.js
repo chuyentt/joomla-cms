@@ -142,8 +142,8 @@ function initMap() {
                 infoWindow.setContent('<div id="form"><input type="hidden" name="jform[id]" value="'+item.id+'">' +
 '<input type="hidden" name="jform[ordering]" value="'+item.ordering+'">' +
 '<input type="hidden" name="jform[state]" value="'+item.state+'">' +
-'<input type="hidden" name="jform[checked_out]" value="'+item.check_out+'">' +
-'<input type="hidden" name="jform[checked_out_time]" value="'+item.check_out_time+'">' +
+'<input type="hidden" name="jform[checked_out]" value="'+item.checked_out+'">' +
+'<input type="hidden" name="jform[checked_out_time]" value="'+item.checked_out_time+'">' +
 '<input type="hidden" name="option" value="com_mapme">' +
 '<input type="hidden" name="task" value="featureform.save">' + params.form_token +
 '<table>' +
@@ -151,7 +151,7 @@ function initMap() {
 '<tr><td>Latitude</td><td><input type="text" name="jform[lat]" id="jform_lat" value="'+latLng.lat()+'" placeholder="Latitude"></td></tr>' +
 '<tr><td>Longitude</td><td><input type="text" name="jform[lng]" id="jform_lng" value="'+latLng.lng()+'" placeholder="Longitude"></td></tr>' +
 '<tr><td>Properties</td><td><textarea name="jform[properties]" id="jform_properties" placeholder="Properties">'+item.properties+'</textarea></td></tr>' +
-'<tr><td>Action</td><td><button type="submit" class="validate btn btn-primary">Submit</button><button type="cancel" class="validate btn">Cancel</button></td></tr>' +
+'<tr><td>Action</td><td><button type="submit" class="validate btn btn-primary" onclick="saveData()">Submit</button><button type="cancel" class="validate btn" onclick="cancel();">Cancel</button></td></tr>' +
 '</tabele></div>');
                 infoWindow.open(map, marker);
             });
@@ -164,9 +164,10 @@ function initMap() {
             // Lấy giá trị tọa độ của vị trí click chuột
             data.lat = e.latLng.lat();
             data.lng = e.latLng.lng();
+            data.title = parseInt(items.length+1);
             
             // Hiển thị marker tại vị trí click chuột
-            var marker = new google.maps.Marker({
+            marker = new google.maps.Marker({
                 position: e.latLng,
                 map: map
             });
@@ -181,11 +182,11 @@ function initMap() {
 '<input type="hidden" name="option" value="com_mapme">' +
 '<input type="hidden" name="task" value="featureform.save">' + params.form_token +
 '<table>' +
-'<tr><td>Title</td><td><input type="text" name="jform[title]" id="jform_title" value="Marker '+items.length+1+'" placeholder="Title"></td></tr>' +
+'<tr><td>Title</td><td><input type="text" name="jform[title]" id="jform_title" value="Marker '+parseInt(items.length+1)+'" placeholder="Title"></td></tr>' +
 '<tr><td>Latitude</td><td><input type="text" name="jform[lat]" id="jform_lat" value="'+latLng.lat()+'" placeholder="Latitude"></td></tr>' +
 '<tr><td>Longitude</td><td><input type="text" name="jform[lng]" id="jform_lng" value="'+latLng.lng()+'" placeholder="Longitude"></td></tr>' +
 '<tr><td>Properties</td><td><textarea name="jform[properties]" id="jform_properties" placeholder="Properties"></textarea></td></tr>' +
-'<tr><td>Action</td><td><button type="submit" class="validate btn btn-primary">Submit</button><button type="cancel" class="validate btn">Cancel</button></td></tr>' +
+'<tr><td>Action</td><td><button type="submit" class="validate btn btn-primary" onclick="saveData()">Submit</button><button type="cancel" class="validate btn" onclick="cancel();">Cancel</button></td></tr>' +
 '</tabele></div>');
                 infoWindow.open(map, marker);
             });
@@ -213,4 +214,8 @@ function addToDatabase(data) {
 
 function saveData() {
     
+}
+
+function cancel() {
+    infoWindow.close();
 }

@@ -55,6 +55,7 @@ function getMapParams($params) {
             'height' => $params->get('height'),
             'map_api_key' => $mapapi,
             'form_token' => JHtml::_('form.token'),
+            'url' => JURI::root(),
             'firebase_config' => $params->get('firebase_config') // Nên kiểm tra điều kiện quyền để lấy giá trị này
         );
         return $params;
