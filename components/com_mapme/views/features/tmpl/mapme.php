@@ -44,22 +44,23 @@ $language   = JFactory::getLanguage();
 *
 */
 function getMapParams($params) {
-	$mapapi = $params->get('map_api_key');
-	if ($mapapi != 'YOUR_API_KEY' && strlen($mapapi) == 39) {
-		$params = array(
-			'center' => $params->get('center'),
-			'zoom' => $params->get('zoom'),
-			'maptypeid' => $params->get('maptypeid'),
-			'styles' => $params->get('styles'),
-			'header_height' => $params->get('header_height'),
-			'height' => $params->get('height'),
-			'map_api_key' => $mapapi,
-			'firebase_config' => $params->get('firebase_config') // Nên kiểm tra điều kiện quyền để lấy giá trị này
-		);
-		return $params;
-	} else {
-		JError::raiseWarning( 100, 'No Google Maps API Key entered in your configuration' );
-	}
+    $mapapi = $params->get('map_api_key');
+    if ($mapapi != 'YOUR_API_KEY' && strlen($mapapi) == 39) {
+        $params = array(
+            'center' => $params->get('center'),
+            'zoom' => $params->get('zoom'),
+            'maptypeid' => $params->get('maptypeid'),
+            'styles' => $params->get('styles'),
+            'header_height' => $params->get('header_height'),
+            'height' => $params->get('height'),
+            'map_api_key' => $mapapi,
+            'form_token' => JHtml::_('form.token'),
+            'firebase_config' => $params->get('firebase_config') // Nên kiểm tra điều kiện quyền để lấy giá trị này
+        );
+        return $params;
+    } else {
+            JError::raiseWarning( 100, 'No Google Maps API Key entered in your configuration' );
+    }
 }
 
 /**
@@ -72,31 +73,34 @@ function getMapParams($params) {
  *
  */
 function addMap($params) {
-	$document = JFactory::getDocument();
-	$assetUrl = JURI::root().'components/com_mapme/assets/';
+    $document = JFactory::getDocument();
+    $assetUrl = JURI::root().'components/com_mapme/assets/';
 
-	// Lấy dữ liệu tham số bản đồ để chuyển qua mã JavaScript (JS)
-	$mapParams = getMapParams($params);
-	
-        // Lưu trữ các tham số từ php chuyển qua sử dụng trong JS
-        // phía JS sử dụng: const params = Joomla.getOptions('params');
-	$document->addScriptOptions('params', $mapParams);
+    // Lấy dữ liệu tham số bản đồ để chuyển qua mã JavaScript (JS)
+    $mapParams = getMapParams($params);
 
-	// Thêm định nghĩa style
-	$document->addStyleSheet($assetUrl.'css/mapme.css');
-        
-        // Thêm mã JS để hiển thị bản đồ làm việc với bản đồ.
-        // Lưu ý: ?v1.1 ở cuối đường dẫn URL là báo cho phía client biết
-        // có sự thay đổi mã nguồn từ phía server. Nếu không thì những thay đổi
-        // mã từ phía server sẽ không có hiệu lực vì cơ chế cache từ client.
-        // Các thay đổi mã JS phần toàn cục: biến, hằng, hàm thì nên thêm phiên
-        // bản ví dụ: ?v1.2, ?v1.3,... những thay đổi mã trong nội bộ của một
-        // hàm trước đó thì không cần sửa phiên bản.
-	$document->addScript($assetUrl.'js/mapme.js?v1.1');
+    // Lưu trữ các tham số từ php chuyển qua sử dụng trong JS
+    // phía JS sử dụng: const params = Joomla.getOptions('params');
+    $document->addScriptOptions('params', $mapParams);
 
-	// Thêm Google Maps API
-	$document->addScript('//maps.googleapis.com/maps/api/js?key='.$mapParams['map_api_key'].'&libraries=places,geometry,visualization&callback=initMap', true, true, true);
+    // Thêm định nghĩa style
+    $document->addStyleSheet($assetUrl.'css/mapme.css');
+
+    // Thêm mã JS để hiển thị bản đồ làm việc với bản đồ.
+    // Lưu ý: ?v1.1 ở cuối đường dẫn URL là báo cho phía client biết
+    // có sự thay đổi mã nguồn từ phía server. Nếu không thì những thay đổi
+    // mã từ phía server sẽ không có hiệu lực vì cơ chế cache từ client.
+    // Các thay đổi mã JS phần toàn cục: biến, hằng, hàm thì nên thêm phiên
+    // bản ví dụ: ?v1.2, ?v1.3,... những thay đổi mã trong nội bộ của một
+    // hàm trước đó thì không cần sửa phiên bản.
+    $document->addScript($assetUrl.'js/mapme.js?v1.2');
+
+    // Thêm Google Maps API
+    $document->addScript('//maps.googleapis.com/maps/api/js?key='.$mapParams['map_api_key'].'&libraries=places,geometry,visualization&callback=initMap', true, true, true);
 }
+
+// Chuyển items qua JavaScript để hiển thị markers
+$document->addScriptOptions('items', $this->items);
 
 // Gọi hàm để thực thi những thay đổi
 addMap($this->params);

@@ -3,8 +3,11 @@ var marker;
 var infoWindow;
 var messageWindow;
 
-// Lấy giá tham số đã lưu từ Joomla
+// Lấy tham số đã lưu từ Joomla
 const params = Joomla.getOptions('params');
+
+// Lấy danh sách các bản ghi đã lưu từ Joomla
+const items = Joomla.getOptions('items');
 
 // Các phần tiếp theo làm theo các hướng dẫn trong tài liệu của Google Maps API
 
@@ -125,6 +128,36 @@ function initMap() {
             map.fitBounds(bounds);
         });
         // [END region_getplaces]
+        
+        // Hiển thị các markers đã lưu trong CSDL
+        items.forEach(function(item) {
+            var pos = new google.maps.LatLng(item.lat,item.lng);
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: map
+            });
+            
+            marker.addListener('click', function() {
+                var latLng = marker.getPosition();
+                infoWindow.setContent('<div id="form"><input type="hidden" name="jform[id]" value="'+item.id+'">' +
+'<input type="hidden" name="jform[ordering]" value="'+item.ordering+'">' +
+'<input type="hidden" name="jform[state]" value="'+item.state+'">' +
+'<input type="hidden" name="jform[checked_out]" value="'+item.check_out+'">' +
+'<input type="hidden" name="jform[checked_out_time]" value="'+item.check_out_time+'">' +
+'<input type="hidden" name="option" value="com_mapme">' +
+'<input type="hidden" name="task" value="featureform.save">' + params.form_token +
+'<table>' +
+'<tr><td>Title</td><td><input type="text" name="jform[title]" id="jform_title" value="'+item.title+'" placeholder="Title"></td></tr>' +
+'<tr><td>Latitude</td><td><input type="text" name="jform[lat]" id="jform_lat" value="'+latLng.lat()+'" placeholder="Latitude"></td></tr>' +
+'<tr><td>Longitude</td><td><input type="text" name="jform[lng]" id="jform_lng" value="'+latLng.lng()+'" placeholder="Longitude"></td></tr>' +
+'<tr><td>Properties</td><td><textarea name="jform[properties]" id="jform_properties" placeholder="Properties">'+item.properties+'</textarea></td></tr>' +
+'<tr><td>Action</td><td><button type="submit" class="validate btn btn-primary">Submit</button><button type="cancel" class="validate btn">Cancel</button></td></tr>' +
+'</tabele></div>');
+                infoWindow.open(map, marker);
+            });
+            
+            markers.push(marker);
+        });
 
         // Kiểm soát sự kiện click chuột trên bản đồ
         map.addListener('click', function(e) {
@@ -133,10 +166,31 @@ function initMap() {
             data.lng = e.latLng.lng();
             
             // Hiển thị marker tại vị trí click chuột
-            marker = new google.maps.Marker({
+            var marker = new google.maps.Marker({
                 position: e.latLng,
                 map: map
             });
+            
+            marker.addListener('click', function() {
+                var latLng = marker.getPosition();
+                infoWindow.setContent('<div id="form"><input type="hidden" name="jform[id]" value="">' +
+'<input type="hidden" name="jform[ordering]" value="">' +
+'<input type="hidden" name="jform[state]" value="">' +
+'<input type="hidden" name="jform[checked_out]" value="">' +
+'<input type="hidden" name="jform[checked_out_time]" value="">' +
+'<input type="hidden" name="option" value="com_mapme">' +
+'<input type="hidden" name="task" value="featureform.save">' + params.form_token +
+'<table>' +
+'<tr><td>Title</td><td><input type="text" name="jform[title]" id="jform_title" value="Marker '+items.length+1+'" placeholder="Title"></td></tr>' +
+'<tr><td>Latitude</td><td><input type="text" name="jform[lat]" id="jform_lat" value="'+latLng.lat()+'" placeholder="Latitude"></td></tr>' +
+'<tr><td>Longitude</td><td><input type="text" name="jform[lng]" id="jform_lng" value="'+latLng.lng()+'" placeholder="Longitude"></td></tr>' +
+'<tr><td>Properties</td><td><textarea name="jform[properties]" id="jform_properties" placeholder="Properties"></textarea></td></tr>' +
+'<tr><td>Action</td><td><button type="submit" class="validate btn btn-primary">Submit</button><button type="cancel" class="validate btn">Cancel</button></td></tr>' +
+'</tabele></div>');
+                infoWindow.open(map, marker);
+            });
+            
+            markers.push(marker);
             
             // Truyền vào hàm addToDatabase
             addToDatabase(data);
@@ -151,7 +205,7 @@ function initMap() {
  */
 function addToDatabase(data) {
     // Test: Hiện thông báo tọa độ. Có thể bỏ dòng này khi test thành công
-    alert(data.lat.toString().concat(",",data.lng.toString()));
+    // alert(data.lat.toString().concat(",",data.lng.toString()));
     
     // Gọi hàm saveData
     return true;
