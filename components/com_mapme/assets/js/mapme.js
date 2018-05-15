@@ -132,6 +132,12 @@ function initMap() {
             data.lat = e.latLng.lat();
             data.lng = e.latLng.lng();
             
+            // Hiển thị marker tại vị trí click chuột
+            marker = new google.maps.Marker({
+                position: e.latLng,
+                map: map
+            });
+            
             // Truyền vào hàm addToDatabase
             addToDatabase(data);
         });
