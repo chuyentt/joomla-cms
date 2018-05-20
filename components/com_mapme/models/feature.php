@@ -251,6 +251,28 @@ class MapmeModelFeature extends JModelItem
 	}
 
 	/**
+	 * Hàm lưu bản ghi marker vào bảng của csdl
+	 *
+	 */
+        public function saveAjax($data) {
+            $table = $this->getTable();
+            $table->load(intval($data['id']));
+            $table->state = $data['state'];
+            $table->created_by = $data['created_by'];
+            $table->modified_by = $data['modified_by'];
+            $table->ordering = $data['ordering'];
+            if (intval($data['id']) === 0) {
+                $table->ordering = $table->getNextOrder();
+            }
+            $table->ordering = $table->getNextOrder();
+            $table->title = $data['title'];
+            $table->lat = $data['lat'];
+            $table->lng = $data['lng'];
+            $table->properties = $data['properties'];
+            return $table->store($data);
+        }
+
+        /**
 	 * Method to delete an item
 	 *
 	 * @param   int $id Element id

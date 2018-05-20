@@ -115,6 +115,41 @@ class MapmeControllerFeature extends JControllerLegacy
 	}
 
 	/**
+	 * Chuẩn bị lưu dữ liệu theo Ajax
+	 *
+	 */
+        public function saveAjax()
+	{
+            // Khởi tạo các biến
+            $app = JFactory::getApplication();
+
+            // Lấy dữ liệu người dùng đã nhập
+            $data = $app->input->get('data', array(), 'array');
+            
+            // Kiểm tra người dùng về quyền cập nhật
+            $user = JFactory::getUser();
+            
+            if (intval($data['id']) === 0 || intval($data['created_by']) === 0) {
+                $data['created_by'] = $user->id;
+                $data['modified_by'] = $user->id;
+            } else {
+                $data['modified_by'] = $user->id;
+            }
+            
+            if ($user->authorise('core.edit', 'com_mapme') || $user->authorise('core.edit.state', 'com_mapme'))
+            {
+                $model = $this->getModel('Feature', 'MapmeModel');
+                
+                // Gọi hàm saveAjax ở model để lưu dữ liệu
+                $return = $model->saveAjax($data);
+            }
+            else
+            {
+                throw new Exception(500);
+            }
+	}
+
+        /**
 	 * Remove data
 	 *
 	 * @return void

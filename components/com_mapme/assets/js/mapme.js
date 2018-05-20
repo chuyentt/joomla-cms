@@ -139,18 +139,15 @@ function initMap() {
             
             marker.addListener('click', function() {
                 var latLng = marker.getPosition();
-                infoWindow.setContent('<div id="form"><input type="hidden" name="jform[id]" value="'+item.id+'">' +
-'<input type="hidden" name="jform[ordering]" value="'+item.ordering+'">' +
-'<input type="hidden" name="jform[state]" value="'+item.state+'">' +
-'<input type="hidden" name="jform[checked_out]" value="'+item.checked_out+'">' +
-'<input type="hidden" name="jform[checked_out_time]" value="'+item.checked_out_time+'">' +
-'<input type="hidden" name="option" value="com_mapme">' +
-'<input type="hidden" name="task" value="featureform.save">' + params.form_token +
+                infoWindow.setContent('<div id="form">'+
+'<input type="hidden" name="id" value="'+item.id+'" />' +
+'<input type="hidden" name="ordering" value="'+item.ordering+'" />' +
+'<input type="hidden" name="state" value="'+item.state+'" />' +
 '<table>' +
-'<tr><td>Title</td><td><input type="text" name="jform[title]" id="jform_title" value="'+item.title+'" placeholder="Title"></td></tr>' +
-'<tr><td>Latitude</td><td><input type="text" name="jform[lat]" id="jform_lat" value="'+latLng.lat()+'" placeholder="Latitude"></td></tr>' +
-'<tr><td>Longitude</td><td><input type="text" name="jform[lng]" id="jform_lng" value="'+latLng.lng()+'" placeholder="Longitude"></td></tr>' +
-'<tr><td>Properties</td><td><textarea name="jform[properties]" id="jform_properties" placeholder="Properties">'+item.properties+'</textarea></td></tr>' +
+'<tr><td>Title</td><td><input type="text" name="title" id="jform_title" value="'+item.title+'" placeholder="Title"></td></tr>' +
+'<tr><td>Latitude</td><td><input type="text" name="lat" id="jform_lat" value="'+latLng.lat()+'" placeholder="Latitude"></td></tr>' +
+'<tr><td>Longitude</td><td><input type="text" name="lng" id="jform_lng" value="'+latLng.lng()+'" placeholder="Longitude"></td></tr>' +
+'<tr><td>Properties</td><td><textarea name="properties" id="jform_properties" placeholder="Properties">'+item.properties+'</textarea></td></tr>' +
 '<tr><td>Action</td><td><button type="submit" class="validate btn btn-primary" onclick="saveData()">Submit</button><button type="cancel" class="validate btn" onclick="cancel();">Cancel</button></td></tr>' +
 '</tabele></div>');
                 infoWindow.open(map, marker);
@@ -174,18 +171,14 @@ function initMap() {
             
             marker.addListener('click', function() {
                 var latLng = marker.getPosition();
-                infoWindow.setContent('<div id="form"><input type="hidden" name="jform[id]" value="">' +
-'<input type="hidden" name="jform[ordering]" value="">' +
-'<input type="hidden" name="jform[state]" value="">' +
-'<input type="hidden" name="jform[checked_out]" value="">' +
-'<input type="hidden" name="jform[checked_out_time]" value="">' +
-'<input type="hidden" name="option" value="com_mapme">' +
-'<input type="hidden" name="task" value="featureform.save">' + params.form_token +
+                infoWindow.setContent('<div id="form">' +
+'<input type="hidden" name="id" value="">' +
+'<input type="hidden" name="state" value="1">' +
 '<table>' +
-'<tr><td>Title</td><td><input type="text" name="jform[title]" id="jform_title" value="Marker '+parseInt(items.length+1)+'" placeholder="Title"></td></tr>' +
-'<tr><td>Latitude</td><td><input type="text" name="jform[lat]" id="jform_lat" value="'+latLng.lat()+'" placeholder="Latitude"></td></tr>' +
-'<tr><td>Longitude</td><td><input type="text" name="jform[lng]" id="jform_lng" value="'+latLng.lng()+'" placeholder="Longitude"></td></tr>' +
-'<tr><td>Properties</td><td><textarea name="jform[properties]" id="jform_properties" placeholder="Properties"></textarea></td></tr>' +
+'<tr><td>Title</td><td><input type="text" name="title" id="jform_title" value="Marker '+parseInt(items.length+1)+'" placeholder="Title"></td></tr>' +
+'<tr><td>Latitude</td><td><input type="text" name="lat" id="jform_lat" value="'+latLng.lat()+'" placeholder="Latitude"></td></tr>' +
+'<tr><td>Longitude</td><td><input type="text" name="lng" id="jform_lng" value="'+latLng.lng()+'" placeholder="Longitude"></td></tr>' +
+'<tr><td>Properties</td><td><textarea name="properties" id="jform_properties" placeholder="Properties"></textarea></td></tr>' +
 '<tr><td>Action</td><td><button type="submit" class="validate btn btn-primary" onclick="saveData()">Submit</button><button type="cancel" class="validate btn" onclick="cancel();">Cancel</button></td></tr>' +
 '</tabele></div>');
                 infoWindow.open(map, marker);
@@ -213,8 +206,44 @@ function addToDatabase(data) {
 };
 
 function saveData() {
+    var divNode = document.getElementById('form');
+    var inputNodes = divNode.getElementsByTagName('input');
+    var input = {};
+    for(var i = 0; i < inputNodes.length; i++) {
+        inputNode = inputNodes[i];
+        name = inputNode.name;
+        value = inputNode.value;
+        input[name]=value;
+    }
+    var textAreas = divNode.getElementsByTagName('textarea');
+    input[textAreas[0].name] = textAreas[0].value;
     
+    var request = {
+        'option' : 'com_mapme',
+        'task'   : 'feature.saveajax',
+        'data'   : input
+    };
+    jQuery.ajax({
+        type   : 'POST',
+        data   : request,
+        success: function (response) {
+            // Tạo message mặc định của Joomla
+            Joomla.renderMessages({"success":["Your item has been saved."]});
+            // Chuyển kết quả của method vào phần tử html class status
+            //$('.status').html(response);
+            infoWindow.close();
+            
+            // TODO: Cần phải cập nhật dữ liệu item
+            
+        },
+	error: function (request, status, error) {
+            // Render the message
+            Joomla.renderMessages({"danger":[error]});
+            infoWindow.close();
+        }
+    });
 }
+
 
 function cancel() {
     infoWindow.close();
