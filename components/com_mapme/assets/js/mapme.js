@@ -1,5 +1,4 @@
 var map;
-var marker;
 var infoWindow;
 var messageWindow;
 
@@ -164,7 +163,7 @@ function initMap() {
             data.title = parseInt(items.length+1);
             
             // Hiển thị marker tại vị trí click chuột
-            marker = new google.maps.Marker({
+            var marker = new google.maps.Marker({
                 position: e.latLng,
                 map: map
             });
